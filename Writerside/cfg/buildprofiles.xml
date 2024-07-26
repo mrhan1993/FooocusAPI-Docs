@@ -3,8 +3,10 @@
 <buildprofiles xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/build-profiles.xsd"
                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-    <variables></variables>
-    <build-profile instance="f">
+    <variables>
+        <versions-switcher>https://raw.githubusercontent.com/mrhan1993/FooocusAPI-Docs/main/Writerside/cfg/help-versions.json</versions-switcher>
+    </variables>
+    <build-profile instance="fooocusapi">
         <variables>
             <noindex-content>false</noindex-content>
         </variables>

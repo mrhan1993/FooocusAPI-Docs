@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE rules SYSTEM "https://resources.jetbrains.com/writerside/1.0/redirection-rules.dtd">
+<rules>
+    <!-- format is as follows
+    <rule id="<unique id>">
+        <accepts>page.html</accepts>
+    </rule>
+    -->
+    <rule id="2ae310c">
+        <description>Created after removal of "Docker" from FooocusAPI</description>
+        <accepts>Docker.html</accepts>
+    </rule>
+    <rule id="52577fa0">
+        <description>Created after removal of "QuickStart" from FooocusAPI</description>
+        <accepts>QuickStart.html</accepts>
+    </rule>
+    <rule id="3cfc1d0">
+        <description>Created after removal of "DescribeImagePrompt" from FooocusAPI</description>
+        <accepts>DescribeImagePrompt.html</accepts>
+    </rule>
+</rules>
