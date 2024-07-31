@@ -3,14 +3,14 @@
 
 **New future from v2.5.0**
 
-> Note：当你使用 generate mask 的时候，这是一个单独的步骤。它不会在 inpaint 的过程中自动执行。这是因为 
-> generate mask 不是图像生成的一部分，它是一个单独的函数，这也是为什么它有单独的 endpoint。
+> Note: When you use generate mask, it is a separate step. It will not be automatically executed during the inpaint process.
+> This is because generate mask is not part of image generation; it is a separate function, which is why it has a separate endpoint.
 
-它对应的是 WebUI 中下图部分的功能：
+It corresponds to the functionality in the lower part of the WebUI, as shown in the image below:
 
 ![generate_mask_webui_01.png](generate_mask_webui_01.png)
 
-以图中最基础的情况为例：
+Taking the most basic case in the image as an example:
 
 ```python
 import requests
@@ -33,11 +33,13 @@ params = {
 response = requests.post(url, json=params)
 ```
 
-返回值是一个 `base64` 编码的字符串，不包含 `data:image/png;base64,` 前缀。和 `Generate` 接口一样，`image` 可以是 `base64`
-编码的字符串，也可以是图片的 URL。
+The return value is a `base64` encoded string, without the `data:image/png;base64,` prefix. Like the `Generate` interface, `image` can be a `base64` encoded
+string or a URL of an image.
 
-上面的示例中，是 `Generate mask` 接口可以接受的所有参数，实际上，你只需要传递在界面上看到的即可，只有 `image` 是必填的。
-它们中的大多数的都是对应 `sam` 这个模型的，而且都有默认值，所以你不需要全部都传递，只需要传递你需要的即可。
+In the example above, all the parameters that the `Generate mask` interface can accept are listed. In practice, you only need to pass the ones you see on the interface,
+with `image` being the only required field.
+
+Most of these parameters correspond to the `sam` model and have default values, so you don't need to pass all of them. Only pass the ones you need.
 
 ## Inpaint
 
@@ -58,7 +60,8 @@ params = {
 response = requests.post(url, json=params)
 ```
 
-这个示例就是上面的图片和生成的 `mask`，不过请注意，重绘区域将严格遵循 `mask` 中的部分。比如上面的代码，其结果是：
+This example shows the above image and the generated `mask`. However, please note that the redrawing area will strictly adhere to the parts in the `mask`.
+For instance, with the code above, the result is:
 
 ![2024-07-28_20-10-08_8815.png](2024-07-28_20-10-08_8815.png)
 

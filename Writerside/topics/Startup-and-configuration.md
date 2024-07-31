@@ -1,33 +1,37 @@
 # Startup and configuration
 
-尽管称作配置，但 Fooocus 并没有独立的配置文件，几乎所有可调节的东西都是通过命令行进行，在重构时有过把这些选项改为配置文件的想法，不过还是选择了沿用 Fooocus 的做法。
-这意味着，你无需改变使用习惯，仍可以按照 Fooocus 的方式启动 FooocusAPI。也因为配置都是通过命令行选项进行，所以启动和配置被放到了一起。
+Although Fooocus is called a configuration, it does not have a separate configuration file. Almost all adjustable things are done through command line,
+and there was a thought to change the options to a configuration file during the refactoring, but I chose to continue using Fooocus's way.
 
-绝大多数情况下，无论是 Fooocus 还是 FooocusAPI，默认配置已经足够使用。但如果你想进行一些自定义配置，那么本章节将提供一些帮助。
+This means that you don't need to change your usage habits, you can still use Fooocus in the way of Fooocus.
 
-> 本节中，将主要描述 FooocusAPI 新增的部分，以及受其影响的 Fooocus 部分，其他一些必要的部分也会被提及。
+Most of the time, you don't need to change your usage habits, you can still use Fooocus in the way of Fooocus.
 
-你可以使用 `python launch.py --help` 参数查看所有可用的命令行参数。
+> This section will mainly describe the new parts of FooocusAPI, and the parts that are affected by FooocusAPI, and some other necessary parts will also be mentioned.
 
-## FooocusAPI 选项
+You can use `python launch.py --help` to view all available command line arguments.
 
-这些配置选项是 FooocusAPI 独有的，用来控制 FooocusAPI 的行为。
+## FooocusAPI options
 
-- `--nowebui`: 不启动 WebUI，只启动 API 服务。
-- `--base-url BASE_URL`: 用来替换返回的 URL 中的 `base_url`，默认为 `http://127.0.0.1`。
-- `--apikey APIKEY`: 如果指定了该参数，那么请求 API 时，需要在 `header` 中添加 `X-API-KEY`，否则返回 403。
-- `--webhook-url WEBHOOK_URL`: 指定该参数时，当任务完成时，会向该 URL 发送 POST 请求，这对异步任务非常有用，其优先级低于任务参数中传递的 `webhook_url`。
+This configuration options are FooocusAPI's own, used to control FooocusAPI's behavior.
 
-## Fooocus 选项
+- `--nowebui`: Do not launch WebUI，Only API
+- `--base-url BASE_URL`: Used for replacing `base_url` in the returned URL, default is `http://127.0.0.1`.
+- `--apikey APIKEY`: If you specify this option, you need to add `X-API-KEY` to the `header` when requesting API, otherwise it will return 403.
+- `--webhook-url WEBHOOK_URL`: When the task is completed, a POST request will be sent to this URL, which is very useful for asynchronous tasks, and its priority is lower than the `webhook_url` passed in the task parameters.
 
-这些是 Fooocus 原本就有的选项，但现在(可能)也会影响 FooocusAPI 的行为。
+## Fooocus options
 
-- `--listen [IP]`: 用来指定监听的 IP 地址，默认为 `127.0.0.1`，如果不指定具体的值，仅指定 `--listen`，等同于指定 `--listen 0.0.0.0`。该参数同时影响 WebUI 和 API 服务。
-- `--port PORT`: 用来指定监听的端口，默认为 `7865`, API 默认使用该端口 `+1` 的端口，该参数同时影响 WebUI 和 API 服务。
-- `--output-path OUTPUT_PATH`: 用来指定输出路径，默认为会输出到项目根目录下的 `outputs` 文件夹中，当前我不建议修改该选项，原因是当前版本没有对这个进行测试，可能会影响 API 结果路径的准确性。
-- `--disable-image-log`: 用来禁止保存图像，即不保存图片到 `output_path` 中，禁用会导致 API 服务无法正常工作。
+These are the options that Fooocus originally had, but now (maybe) will also affect the behavior of FooocusAPI.
 
-还有一些选项，主要影响 WebUI 的行为，对 API 无效：
+- `--listen [IP]`: Used for listening on the specified IP, the default is `127.0.0.1`, if you do not specify the specific value, only specify `--listen`,
+    which is equivalent to specifying `--listen 0.0.0.0`. This parameter also affects the WebUI and API services.
+- `--port PORT`: Used for listening on the specified port, the default is `7865`, API uses the next port, the default is `7866`. This parameter also affects the WebUI and API services.
+- `--output-path OUTPUT_PATH`: Used to specify the output path, the default is `outputs`, which is in the project root directory.
+    I do not recommend modifying this option, because the current version has not been tested, which may affect the accuracy of the API result path.
+- `--disable-image-log`: Used to disable saving images, which will cause the API service to fail to work.
+
+Some options mainly affect the behavior of WebUI, which are invalid for API:
 
 - `--in-browser`
 - `--disable-in-browser`
@@ -38,12 +42,15 @@
 - `--disable-analytics`
 - `--enable-auto-describe-image`
 
-## 端口配置
+## Port configuration
 
-Fooocus 有两种方式修改其 WebUI 监听的端口，分别是通过 `--port PORT` 和环境变量 `GRADIO_SERVER_PORT`。
-这两种方式都会影响 API 服务的端口，除此之外，还可以通过环境变量 `API_PORT` 单独修改 API 服务的端口。它们的优先级为：
+There are two ways to modify the port that Fooocus's WebUI listens to, which are `--port PORT` and the environment variable `GRADIO_SERVER_PORT`.
+
+These two ways will affect the port that Fooocus's API listens to, in addition, you can also modify the port of API service separately through the environment variable `API_PORT`.
+The priority is as follows:
+
 `API_PORT > --port PORT > GRADIO_SERVER_PORT`
 
-> 之所以变成这样一个原因是我觉得没必要单独增加一个选项来修改 API 服务的端口，而且使用率低，所以复用了 WebUI 的端口配置。但更改端口又确实有需求，使用 `--port PORT` 尽管也可以，但不够直观，所以增加了 `API_PORT`。
-> 另一个原因是为了降低配置要求，即开箱即用，不需要额外配置，此时沿用 WebUI 的端口可以尽可能保留用户的使用习惯。
-
+> The reason for this is that I think it is not necessary to add a separate option to modify the port of the API service, and the usage is low, so reuse the port configuration of WebUI.
+> But change the port is indeed necessary, and using `--port PORT` can also be used, but it is not intuitive enough, so `API_PORT` is added.
+> Another reason is to reduce the configuration requirements, that is, out of the box, no additional configuration is required, at this time, the port of WebUI can be retained as much as possible to retain the user's usage habits.

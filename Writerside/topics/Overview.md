@@ -1,19 +1,21 @@
 # Overview
 
-FooocusAPI 是对 [Fooocus-API](https://github.com/mrhan1993/Fooocus-API) 项目的重构，它们都是对 [Fooocus](https://github.com/lllyasviel/Fooocus) 项目的二次开发，
-旨在解决原项目中 Gradio 的 API 调用难以理解，且难以满足将 Fooocus 作为服务部署时的使用问题。
+FooocusAPI is a refactor of [Fooocus-API](https://github.com/mrhan1993/Fooocus-API), they are both the secondary development of [Fooocus](https://github.com/lllyasviel/Fooocus).
+It is used to solve the problem that the API call of Gradio in the original project is difficult to understand and difficult to meet the use of Fooocus as a service deployment.
 
-> 由于该项目属于 Fooocus 分支，因此文档会有部分内容直接取自 Fooocus 文档，且对其有许多参考。
+> As this project is a branch of Fooocus, so the document will have some content directly taken from Fooocus document, and there are many references to it.
 
 ## How about Fooocus work
 
-当你开始阅读 Fooocus 的代码时很容易发现，其对于参数的处理、任务管理等主要逻辑都集中于 [async_worker.py](https://github.com/lllyasviel/Fooocus/blob/main/modules/async_worker.py) 这个文件。
+When you start reading the code of Fooocus, you will find that most of the main logic of the parameters, task management, etc.
+are concentrated in the [async_worker.py](https://github.com/lllyasviel/Fooocus/blob/main/modules/async_worker.py) file.
 
-> 以下内容为本人阅读项目代码后的个人理解，不代表 Fooocus 官方，仅供参考。并且只设计基础的执行流程，不包括更加底层的模型推理部分。
+> Next is my personal understanding of the code, which does not represent the official Fooocus, and is for reference only.
+> And only the basic execution flow is designed, not the more low-level model inference part.
 
-由于 [Fooocus v2.5.0](https://github.com/lllyasviel/Fooocus/releases/tag/v2.5.0) 对该文件进行了重构，因此这里以 2.4.3 为例简要说明该文件的工作逻辑：
+Because [Fooocus v2.5.0](https://github.com/lllyasviel/Fooocus/releases/tag/v2.5.0) refactored this file, so here is a brief explanation of the work logic of this file at 2.4.3:
 
-首先，该文件定义了一个 `AsyncTask` 类，它用来实例化任务对象
+First，a class `AsyncTask` is defined to instantiate task objects
 
 ```python
 class AsyncTask:
@@ -25,20 +27,19 @@ class AsyncTask:
         self.processing = False
 ```
 
-- `args`：用于存储任务参数，它是一个列表，包含用户从 WebUI 提交来的信息
-- `yields`：用于存储任务执行过程中产生的中间结果，它是一个列表，会包含进度、正在执行的操作、预览图信息
-- `results`：用于存储任务执行完成后产生的结果，它是一个列表，会包含生成的图片的本地路径
-- `last_stop`：用于记录任务中断信息，可以是 skip, stop，在任务执行的循环中会一直检查该属性
-- `processing`：用于记录任务是否正在执行，如果为 True 则表示任务正在执行
+- `args`: Used for store task parameters, it is a list, which contains the information submitted by the user from WebUI
+- `yields`: Used for storing the progress, intermediate results, and preview images generated during the task execution. It is a list
+- `results`：Used for store the final result of the task, it is a list, and will contain the local path of the generated image
+- `last_stop`：Used for record the last stop status of the task, which can be `skip` or `stop`, and will be checked in the loop of the task execution
+- `processing`：Used for record the current status of the task, if it is True, it means that the task is being executed
 
-然后，定义了一个列表 `async_tasks = []`，该列表作为一个待执行任务的队列，有一个死循环会尝试从中拿取任务并执行
+And then, defined a list `async_tasks = []`, which is a queue of tasks to be executed, and there is a loop that will try to take tasks from it and execute them.
 
-接下来是一个长达一千行的方法 `worker`，这其中绝大部分是对于参数的各种处理，但是没有关系，我们一点点从头开始。
+Next is a long 1000-line method `worker`, most of which are various parameter processing, but no problem, we start from the beginning one by one.
 
-当一个任务被提交，也即 WebUI 上的 Generate 按钮被按下时，从 WebUI 上提交的信息会首先被实例化为一个 task 对象并添加到 `async_tasks` 列表中，
-这个过程在 `webui.py` 的第 50 行，
-
-之后，一直对 `async_tasks` 列表进行循环检查的循环会拿取这个任务，这部分代码位于 `async_tasks.py` 的末尾：
+When a task is submitted, the information submitted by the user from WebUI will be instantiated as a task object and added to the `async_tasks` list,
+the process is in the 50th line of `webui.py`, next, the loop that checks the `async_tasks` list will take the task and execute it.
+This code is located at the end of `async_tasks.py`:
 
 ```python
 while True:
@@ -61,23 +62,30 @@ while True:
                 del modules.patch.patch_settings[pid]
 ```
 
-任务被拿取之后被传递给了 `handler` 处理（135行开始）
+After task is taken, it will be passed to `handler` for processing (135 line)
 
-首先，`handler` 将所有参数取出，并对部分参数进行了初步的整理，这部分大概到 220 行结束
+First, `handler` will take all the parameters and do some preliminary processing, this part end at 220 line
 
-接下来，是对参数的进一步处理，比如大小写转换、根据选择的 `performance` 确定步数、模型、lora以及对应的其他参数的调整，进行可能的模型下载，这大概到 343 行
+Next, there is further processing of the parameters, such as case conversion, determining the number of steps based on the selected performance, adjusting the model, lora,
+and corresponding other parameters, and performing possible model downloads, which should be done around line 343
 
-然后是两个列表的定义：`goals = []` 和 `tasks = []` ，它们分别用于存储图像处理标记也即 `uov` `inpaint` `ip`，`tasks` 则用于出处拆分任务，当 `image_number > 1` 时，会被拆分并暂存于此
+And then defined two list: `goals = []` and `tasks = []`, They are respectively used to store image processing labels, i.e `uov` `inpaint` `ip`,
+ `tasks` Used to split tasks, when `image_number > 1` the task will be split into multiple tasks, and the `tasks` list will be used to store the split tasks
 
-接下来，根据是否勾选了 `input_image` 执行该部分代码，其作用是根据当前所在的 `tab` 以及 `mixing_image_prompt_and_vary_upscale`
-和 `mixing_image_prompt_and_inpaint` 的勾选情况向 `goals` 列表增加标记，同时上传的各种图像进行预处理、以及可能的模型下载。这部分大概位于 `348-422` 行
+Next, depending on whether `input_image` is checked, this part of the code is executed. Its function is to add markers to the `goals` list based on
+the current `tab` and the checked status of `mixing_image_prompt_and_vary_upscale` and `mixing_image_prompt_and_inpaint`. At the same time,
+various uploaded images are preprocessed and possible model downloads are performed. This section is located approximately at lines `348-422`.
 
-无论是否勾选 `input_image` 都会在一个短暂的加载模型和覆盖参数之后进入到 `skip_prompt_processing` 的判断。这个逻辑位于 `448-549` 行，其作用是对描述词、反向描述词
-根据选择的 `styles` 进行展开，模型优化
+Regardless of whether `input_image` is checked or not, the code will proceed to the `skip_prompt_processing` judgment after
+a brief loading of the model and overlay of parameters. This logic is located at lines `448-549`. Its function is to expand
+the description words and reverse description words based on the selected `styles` for model optimization.
 
-接下来的是根据 `golas` 中的内容进行的一系列处理。除开 upscale fast 会直接返回结果，其他几种情况依然是阶段性处理，直到 868 行对 tasks 列表进行循环。如果一切顺利，会在这里做最后的处理，比如格式化元数据、保存文件、返回结果
+What follows is a series of processing steps based on the content of `goals`. Apart from `upscale fast`, which will return the result directly,
+the other situations are still processed in stages until line 868, where the `tasks` list is iterated over. If everything goes smoothly, 
+the final processing will be done here, such as formatting metadata, saving files, and returning the results.
 
-整个过程中，任务执行状态通过该任务对象的 `yields` 属性不断更新。通过 `callback` 函数，我们可以很清楚看到列表中的存储结构：
+Throughout the entire process, the status of task execution is continuously updated through the `yields` property of the task object.
+By using the `callback` function, we can clearly see the storage structure in the list:
 
 ```python
 def callback(step, x0, x, total_steps, y):
@@ -87,42 +95,45 @@ def callback(step, x0, x, total_steps, y):
         f'Sampling step {step + 1}/{total_steps}, image {current_task_id + 1}/{image_number} ...', y)])
 ```
 
-简单计算后会得出一个类似下边的列表 `['preview', (60, 'Sample step 60/100, image 1/1 ...', y)]`，这个列表中元素含义如下：
+After a simple calculation, a list similar to the following will be obtained: `['preview', (60, 'Sample step 60/100, image 1/1 ...', y)]`.
+The meaning of the elements in this list is as follows:
 
-- `preview`：这类似于是一个阶段标识，其本身可以提供的信息有限
-- 元组：
-  - 60：进度，这很容易理解，而且是总进度
-  - 'Sample step 60/100, image 1/1 ...'：进度的文字描述
-  - y：这个是每一步的图像，也就是拿这个可以看到一个图像的生成过程
+- `preview`：This is similar to a phase identifier, and the information it can provide is limited.
+- Tuple：
+  - 60: The progress, which is easy to understand, refers to the overall progress.
+  - 'Sample step 60/100, image 1/1 ...': The description of the current step
+  - y：This refers to the image for each step, which means that using this, you can see the process of an image being generated.
 
 ## Thinking When Reconstructing
 
-在 [konieshadow](https://github.com/konieshadow) 创建的 [Fooocus-API](https://github.com/mrhan1993/Fooocus-API) 项目中，他实现了一个新的任务队列，并基于 FastAPI 构建了新的任务对象，然后通过重写 `async_worker.py` 的部分逻辑完成了对 Fooocus-API 的开发。
+In the [Fooocus-API](https://github.com/mrhan1993/Fooocus-API) project created by [konieshadow](https://github.com/konieshadow), he implemented a new task queue and built new task objects based on FastAPI. Then, by rewriting some of the logic in `async_worker.py`, he completed the development of Fooocus-API.
 
-但是在接手并维护该项目半年后，这种处理方式带来的问题变得越发难以处理，最主要的是下面两个问题：
+After taking over and maintaining the project for half a year, the issues caused by this processing method have become increasingly difficult to handle.
+The main problems are the following two:
 
-1. 在应对 Fooocus 更新版本时，需要同步更新 `async_worker.py` 中的代码，作为生成器，需要小心应对每一次变动
-2. 项目的启动是以启动一个 FastAPI 服务为前提的，这导致 Fooocus 中的前置启动逻辑无法被复用，需要重新实现，比如依赖的安装、环境检测、配置文件读取等，尽管可以通过简单的复制代码实现
+1. When dealing with updates to the Fooocus version, it is necessary to synchronously update the code in `async_worker.py`. As a generator, one must be careful to handle each change.
+2. The startup of the project is based on the premise of starting a FastAPI service, which prevents the reuse of the pre-startup logic in Fooocus and requires reimplementation. 
+This includes tasks such as dependency installation, environment detection, configuration file reading, etc. Although these can be achieved through simple code duplication.
 
-此外，还有一些历史遗留的小问题，比如：
+Additionally, there are some historical minor issues, such as:
 
-无法和 WebUI 同时使用
+- Inability to use WebUI simultaneously.
+- Need to request a separate EndPoint to obtain progress images.
+- Incomplete persistence of task information and inconsistent return data formats.
 
-获取进度图需要请求单独的 EndPoint
+Based on the above issues, I have decided to refactor Fooocus-API with the following approach:
 
-任务持久化信息保存不完整、返回数据格式不够统一
 
-基于以上问题，我决定对 Fooocus-API 进行重构，其思路如下：
+1. Utilize the task handling logic in `async_worker.py`, with the API solely responsible for receiving parameters and passing them to the task handling logic.
+2. Abandon the separately maintained queue and reuse the queue in `async_worker.py`.
+3. Merge interface functions, since all parameters are ultimately processed through the `handler` function in `async_worker.py`, the API only needs to be responsible for receiving parameters and passing them on. Separate interfaces are unnecessary.
 
-1. 使用 `async_worker.py` 中的任务处理逻辑，API 只负责接收参数并传递给任务处理逻辑
-2. 放弃单独维护的队列，复用 `async_worker.py` 中的队列
-3. 合并接口功能，既然所有参数最终都是通过 `async_worker.py` 中的 `handler` 函数处理的，那么 API 只需要负责接收参数并传递即可，单独分离的接口是不必要的
 
 ## How about FooocusAPI work
 
-基于上述逻辑，我重新设计了 FooocusAPI 的结构。
+So, I redesigned the structure of FooocusAPI.
 
-首先，在 `webui.py` 中增加一个方法，用来启动 API 服务，以及 WebUI，此时，我们可以同时使用 WebUI 和 API 服务
+Add a method in `webui.py` to start the API service and WebUI, at this time, we can use WebUI and API service at the same time
 
 ```python
 def run_gradio():
@@ -145,13 +156,18 @@ if not args_manager.args.nowebui:
 run_server(args_manager.args)
 ```
 
-然后，将所有的参数放到一个模型 `CommonRequest` 中。
+And then, put all the parameters into a model [`CommonRequest`](https://github.com/mrhan1993/FooocusAPI/blob/main/apis/models/requests.py)
 
-接下来，通过新增一个 `pre_process` 方法，对参数进行预处理，比如保存文件、请求参数、以及一些必要的转换
+After that, I added a new function [`pre_process`](https://github.com/mrhan1993/FooocusAPI/blob/main/apis/utils/pre_process.py), which is used to preprocess the parameters,
+e.g. convert params, save image, download model, etc.
 
-之后，通过 `api_utils` 方法，将参数整理成 `async_worker.py` 中的 `handler` 方法需要的格式，将任务对象传递给 `async_worker.py` 中的 `worker` 方法
+And then, use [`api_utils`](https://github.com/mrhan1993/FooocusAPI/blob/main/apis/utils/api_utils.py) to process the parameters,
+and add it to `async_tasks` list in [`async_worker.py`](https://github.com/mrhan1993/FooocusAPI/blob/main/modules/async_worker.py)
 
-最后，重写 `call_worker` 方法，根据请求参数将不同的数据以不同的方式返回，在返回之前，任务对象会交由 `post_worker` 做最后处理，比如保存结果、发送 Hook 信息等
+In the end, [`call_worker`](https://github.com/mrhan1993/FooocusAPI/blob/main/apis/utils/call_worker.py) will monitor the execution status of the task
+and return different results based on different parameters when the task is completed.
 
-重构完成后，将最大限度保留原有的功能，同时，也使得 API 服务可以和 WebUI 共存，尽管由于对 Fooocus 中没有的功能如自定义放大倍数、Outpaint自定义的支持依然需要对 `async_worker.py` 进行修改，但是，其修改量已经大大减少
-同时，由于对 Fooocus 的修改非常有限，因此，在非大版本变动的情况下，对于 API 的维护成本也大大降低，对于追踪 Fooocus 的更新也更加方便，对于小幅度更新，只需要简单的合并上游的代码即可。
+After the refactoring is completed, the original functionality will be preserved to the maximum extent possible, while also allowing API services to coexist with WebUI.
+Although modifications to `asyncw_worker.py` are still required for features that are not available in Fooocus, such as custom magnification and support for Outpaint customization,
+the amount of modifications has been greatly reduced. Additionally, due to the limited modifications made to Fooocus, the maintenance cost of the API is greatly
+reduced in the absence of major version changes, making it easier to track updates to Fooocus. For minor updates, simply merging upstream code is sufficient.

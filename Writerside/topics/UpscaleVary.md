@@ -1,6 +1,6 @@
 # UpscaleVary
 
-唯一需要注意的是，不要把 `uov_method` 的值写错了：
+The only thing to be mindful of is not to mistype the value for uov_method:
 
 ```python
 import requests
@@ -15,7 +15,7 @@ params = {
 response = requests.post(url, json=params)
 ```
 
-和 WebUI 上完全一致，你只需要传递不同的 `uov_method` 就好了，比如放大这个图片：
+Completely consistent with the WebUI, you just need to pass a different `uov_method`. For example, to enlarge this image:
 
 ```python
 import requests

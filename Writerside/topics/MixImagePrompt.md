@@ -1,6 +1,7 @@
 # MixImagePrompt
 
-这个东西说实话你得去研究 Fooocus，我也很难解释它具体是怎么工作的以及有什么效果。从操作以及实际过程来看，是混合多个操作，比如下面的示例：
+To be honest, you need to study Fooocus to understand how it works and what effects it has. From the perspective of operation and actual process, 
+it involves mixing multiple operations, such as the example below:
 
 ```python
 import requests
@@ -25,12 +26,12 @@ response = requests.post(url, json=params)
 print(response.json())
 ```
 
-它对应的 WebUI 是这样的：
+Its corresponding WebUI looks like this:
 
 ![image_prompt_vary_01.png](image_prompt_vary_01.png)
 ![image_prompt_vary_02.png](image_prompt_vary_02.png)
 
-也可以和 Inpaint 一起使用：
+Use with Inpaint:
 
 ```python
 import requests
@@ -53,7 +54,7 @@ params = {
 response = requests.post(url, json=params)
 ```
 
-甚至可以来个大杂烩：
+All together:
 
 ```python
 import requests

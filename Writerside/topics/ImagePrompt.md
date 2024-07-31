@@ -1,11 +1,12 @@
 # ImagePrompt
 
-首先，我们看下在 WebUI 中如何使用 ImagePrompt
+First, let's take a look how to use ImagePrompt in WebUI:
 
 ![image_prompt_01.png](image_prompt_01.png)
 
-这里有四个完全相同的区域，包含图片、停止位置、权重以及所要进行的操作。因此这里会是一个列表，同时，在程序中它的名字叫做 ControlNet，
-在参数上应该就是下面的样子，请注意，你可以传入更多的元素，但会被截断，只取前四个。当然，你也不是必须传四个，几个都行。
+There are four identical areas here, each containing an image, stop position, weight, and the operation to be performed. Therefore, this will be a list,
+and in the program, it is called ControlNet. In the parameters, it should look like the following. Please note that you can pass more elements,
+but only the first four will be taken. Of course, you are not required to pass four, any number can be used.
 
 ```python
 "controlnet_image": [
@@ -33,7 +34,7 @@
 ]
 ```
 
-然后，使用 `requests` 进行请求就好了：
+Then, request use `requests`:
 
 ```python
 import requests
@@ -53,6 +54,6 @@ params = {
 response = requests.post(url, json=params)
 ```
 
-这是生成的结果：
+Here is the result:
 
 ![2024-07-28_23-44-02_9377.png](2024-07-28_23-44-02_9377.png)

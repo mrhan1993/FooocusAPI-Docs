@@ -1,15 +1,15 @@
 # ImageEnhance
 
-这是 2.5 新增的功能，它的参数更加复杂也更多。但和 ImagePrompt 一样，逻辑不变。还是以 WebUI 演示：
+This is a feature added in version 2.5, with more complex and numerous parameters. However, like ImagePrompt, the logic remains the same. Let's demonstrate with the WebUI:
 
 ![enhance_01.png](enhance_01.png)
 
-将 Enhance 勾选，切换到 Enhance 标签页，还有四个标签页，其中 `Upscale or Variation` 用于对图像预先或者之后进行处理，
-`#1, #2, #3` 表示多次处理，从逻辑上看，它就是先生成一个 `mask` 然后根据描述词进行重绘。你可以将这里看做是 `Upscale or Variation`
-，`Inpaint`，`Generate Mask` 进行了合并。
+By checking Enhance and switching to the Enhance tab, there are four additional tabs, with `Upscale or Variation` used for pre- or post-processing of the image.
+`#1, #2, #3` indicate multiple treatments. Logically, it first generates a `mask` and then redoes the drawing based on the description words. You can consider
+this as a combination of `Upscale or Variation`, `Inpaint`, and `Generate Mask`.
 
-需要注意的是，这三个不是管道任务，比如我们要对一个图像进行如下处理：Vary (Strong) -> Enhance face -> Enhance mouse -> Enhance eye
-你会得到三张结果图像。
+It is important to note that these three are not pipeline tasks. For example, if you want to process an image as
+follows: Vary (Strong) -> Enhance face -> Enhance mouse -> Enhance eye, you will get three result images.
 
 > `enhance_checkbox` must set to True
 

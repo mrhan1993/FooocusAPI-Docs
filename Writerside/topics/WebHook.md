@@ -34,4 +34,4 @@ response = requests.post("http://127.0.0.1:7866/v1/engine/generate", json=params
 print(response.json())
 ```
 
-and you will get the result in your server. the data is a TaskOBJ, like the return of `generate` API.
+and you will get the result in your server. the data is serialization by TaskOBJ, like the return of `generate` API.

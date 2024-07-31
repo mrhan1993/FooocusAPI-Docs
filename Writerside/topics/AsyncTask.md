@@ -1,19 +1,20 @@
 # AsyncTask
 
-本节将演示如何通过不同的参数组合获取不同类型的 Response，Generate 接口提供了以下几种 Response 类型：
+This section will demonstrate how to obtain different types of Response through various combinations of parameters.
+The Generate interface provides the following types of Response:
 
-- `ImageResponse`：直接返回图片
-- `JsonResponse`：返回 JSON 格式的文本
-- `StreamResponse`：流式输出
+- `ImageResponse`: Image bytes
+- `JsonResponse`: Json string
+- `StreamResponse`：Stream output
 
-其中，`ImageResponse` 和 `StreamResponse` 都是同步的，`JsonResponse` 根据参数的不同，可能是同步的，也可能是异步的。
+Among them, `ImageResponse` and `StreamResponse` are synchronous, while `JsonResponse` can be either synchronous or asynchronous depending on the parameters.
 
-示例将以 `Text to Image` 进行演示。
+The example will be demonstrated with `Text to Image`.
 
-## 同步请求
+## Synchronous Request
 ### JsonResponse
 
-这是默认参数时的返回类型，这也是之前示例所使用的类型。
+This is the return type with default parameters, which is also the type used in the previous examples.
 
 ```python
 import requests
@@ -28,12 +29,13 @@ params = {
 response = requests.post(url, json=params)
 ```
 
-完成之后你可以在返回的 JSON 中的 `result` 字段中获取生成的图片的 URL 列表。
+Upon completion, you can obtain the list of URLs for the generated images in the `result` field of the returned JSON.
 
 ### ImageResponse
 
-继续使用上面的代码，在请求中携带 `headers` 并将 `accept` 参数设置为 `image/xxx`，就可以得到一个 `ImageResponse`。支持的
-格式有 `image/png`、`image/jpg`、`image/jpeg`、`image/webp`。尽管如此，你可以在 `/` 后面写上任何格式，但不受支持的格式会被设置为 `image/png`。
+Continuing with the code above, if you include `headers` in the request and set the `accept` parameter to `image/xxx`, 
+you will receive an `ImageResponse`. The supported formats include `image/png`, `image/jpg`, `image/jpeg`, and `image/webp`. 
+Nevertheless, you can write any format after `/`, but unsupported formats will be set to `image/png`.
 
 ```python
 import requests
@@ -52,18 +54,19 @@ params = {
 response = requests.post(url, headers=headers, json=params)
 ```
 
-完成之后你可以在 `response.content` 中获取生成的图片的二进制数据，就像直接从 Web 上下载图片一样。如果将其直接打印出来，会是类似下面的样子：
+Upon completion, you can obtain the binary data of the generated image in `response.content`, just as if you were downloading an image directly from the web.
+If you print it out directly, it will look something like this:
 
 ```text
 b'RIFF\xba-\x01\x00WEBPVP8 \xae-\x01\x00\x10\xe1\x07\x9d\x01*\x80\x04\x80\x03>m4\x95H$"\xa7)\xa2\xf3\xeb\xa10\r\x89gn-\x8d\xb6\xa3\x85\xff)\xa7S....
 ```
 
-> 注意：这种方式会强制将 `image_number` 设置为 1，即只返回一张图片。
+> Note: This method will force the `image_number` to be set to 1, meaning only one image will be returned.
 
 ### StreamResponse
 
-如果你使用过 OpenAI 之类的 LLM，应该对流式输出并不陌生，它会返回一个流，你可以使用 `response.iter_lines()` 来获取流中的数据。
-继续使用上面的代码，在请求中指定 `stream_output` 参数为 `true`，就可以得到一个 `StreamResponse`:
+If you have used LLMs like OpenAI, you should be familiar with streaming output, which returns a stream that you can access using `response.iter_lines()`.
+Continuing with the code above, if you specify the `stream_output` parameter as `true` in the request, you will receive a `StreamResponse`:
 
 ```python
 import requests
@@ -83,7 +86,7 @@ for line in response.iter_lines():
         print(line.decode('utf-8'))
 ```
 
-你会得到一个类似下面的输出：
+You will get this:
 
 ```text
 data: {"progress": 2, "preview": null, "message": "Loading models ...", "images": []}
@@ -104,7 +107,7 @@ data: {"progress": 100, "preview": null, "message": "Finished", "images": ["http
 data:
 ```
 
-稍微修改下代码，去除掉无用的字符，可以获得一系列 Json 字符串：
+By slightly modifying the code to remove unnecessary characters, you can obtain a series of JSON strings:
 
 ```python
 for line in res.iter_lines(chunk_size=8192):
@@ -119,7 +122,7 @@ for line in res.iter_lines(chunk_size=8192):
     print(json_data)
 ```
 
-输出如下：
+The output:
 ```text
 {'progress': 13, 'preview': None, 'message': 'Preparing task 1/1 ...', 'images': []}
 {'progress': 13, 'preview': 'data:image/png;base64,iVBORw0KGgoAAAANSU...', 'message': 'Sampling step 1/4, image 1/1 ...', 'images': []}
@@ -130,11 +133,13 @@ for line in res.iter_lines(chunk_size=8192):
 {'progress': 100, 'preview': None, 'message': 'Finished', 'images': ["http://127.0.0.1:7866/outputs/2024-07-26/2024-07-26_16-29-10_1354.png"]}
 ```
 
-> 注意：当前版本，它返回的 preview 字段总是 PNG 格式的图像，无论是否在参数中设置 `output_format`，不过这并不会影响最终的生成结果，也就是 `images` 字段中的内容。
+> Note: In the current version, the `preview` field always returns images in PNG format, regardless of whether `output_format` is set in the parameters.
+> However, this does not affect the final generated result, which is the content in the `images` field.
 
-## 异步请求
+## Async request
 
-异步请求只有 `JsonResponse` 一种类型，只需要在请求中指定 `async_process` 参数为 `true` 即可。它的返回格式和 `JsonResponse` 一致，只是会立刻返回，只是部分字段为空。
+Asynchronous requests only have one type, `JsonResponse`. You simply need to specify the `async_process` parameter as `true` in the request. 
+Its return format is consistent with `JsonResponse`, but it will return immediately with some fields being empty.
 
 ```python
 import requests
@@ -152,7 +157,7 @@ response = requests.post(url, json=params)
 print(response.json())
 ```
 
-输出如下：
+Output below：
 
 ```python
 {
@@ -170,9 +175,10 @@ print(response.json())
 }
 ```
 
-> 注意：异步不会返回 `req_params`，多数字段仅作为占位符，有用的字段可能只有 `task_id`。
+> Note: Asynchronous requests do not return the specific content of `req_params`, and most other fields are just placeholders. The only useful field might be `task_id`.
 
-## 优先级
+## Priority
 
-程序在处理这些参数的时候，会依次检查 `accept` `stream_output` `async_process`，一旦符合条件，则不在进行后续检查，这意味着优先级
-从高到低依次为：`accept`、`stream_output`、`async_process`。这也就是会说如果同时指定了`accept`、`stream_output` 以及 `async_process`，则 `stream_output` 和 `async_process` 会被忽略。
+When the program processes these parameters, it checks `accept`, `stream_output`, and `async_process` in sequence. Once a condition is met, it does not proceed with subsequent checks.
+This means that the priority order, from highest to lowest, is: `accept`, `stream_output`, `async_process`. This also means that if `accept`, `stream_output`, and `async_process`
+are all specified at the same time, `stream_output` and `async_process` will be ignored.
