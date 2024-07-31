@@ -1,6 +1,6 @@
 # WebHook
 
-You need running a server like this:
+启动一个类似下面的服务器:
 
 ```python
 from fastapi import FastAPI, Request
@@ -19,7 +19,7 @@ async def receive_post_data(request: Request):
 uvicorn.run(app, host="0.0.0.0", port=8000)
 ```
 
-and then, add `webhook_url` to your parameters
+然后，在任务参数中增加 `webhook_url`
 
 ```python
 import requests
@@ -34,4 +34,4 @@ response = requests.post("http://127.0.0.1:7866/v1/engine/generate", json=params
 print(response.json())
 ```
 
-and you will get the result in your server. the data is a TaskOBJ, like the return of `generate` API.
+当任务完成后，服务器会收到一个 POST 请求，其中包含任务的结果。

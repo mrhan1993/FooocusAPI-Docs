@@ -1,13 +1,13 @@
-# QuickStart
+# 快速开始
 
-This section will guide you on how to deploy and use the project, Suppose you have confirmed that your equipment can run the project and have the relevant tools ready. 
-Otherwise, you should read first [Requirement](Requirement.md).
+本节将指导您如何部署和使用项目，假设您已经确认您的设备可以运行项目并且已经准备好了相关工具。
+否则，您应该首先阅读[要求](Requirement.md)。
 
-## Install and run
+## 安装运行
 
-Change to the directory where you want to place the project, if windows, open terminal, cmd or powershell, and then run the following commands:
+切换到您想要放置项目的目录，如果是 Windows 系统，请打开终端、cmd 或 PowerShell，然后运行以下命令：
 
-> Note: The model file usually very large, so leave enough space for the project.
+> 注意：模型文件通常非常大，因此请为项目留出足够的空间。
 
 ### Use conda
 
@@ -43,18 +43,17 @@ venv\Scripts\activate
 python launch.py --nowebui
 ```
 
-> You may be getting `running scripts is disabled on this system` when running the above command use powershell, Run powershell as administrator and execute `Set-ExecutionPolicy RemoteSigned` to solve this problem.
+> 当您使用 PowerShell 运行上述命令时，可能会遇到 `running scripts is disabled on this system` 的错误。请以管理员身份运行 PowerShell ，并执行 `Set-ExecutionPolicy RemoteSigned` 命令来解决这个问题。
 
-## Generate your first image
+## 生成第一张图片
 
-Wait for the program to complete the installation of dependencies and the download of the basic model, open `http://localhost:7866` in your browser, you will see the following page:
+等待程序完成依赖项的安装和基础模型的下载，然后在您的浏览器中打开`http://localhost:7866`，您将看到以下页面：
 
 ![openapi_page.png](openapi_page.png)
 
-Click the `Try it out` button on the right side of the `POST /v1/engine/generate/` interface, and then click the `Execute` button to generate an image.
+点击`POST /v1/engine/generate/`接口右侧的`Try it out`按钮，然后点击`Execute`按钮以生成图像。根据您的设备性能，生成图像可能需要几秒钟或几分钟。之后，您可以在`Response body`字段中找到一个url，
 
-Base the performance of your equipment, it may take a few seconds or minutes to generate an image. After that, you can find an url in the `Response body` field,
-open it in your browser, that is the image you just generated.
+在您的浏览器中打开它，那就是您刚刚生成的图像。
 
 ![image_2407251128.png](image_2407251128.png)
 

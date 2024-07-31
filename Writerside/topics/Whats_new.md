@@ -1,20 +1,22 @@
-# What's new
+# 更新日志
 
 ## 2024-07-31 -- v2.5.0
 
-- Merge Fooocus 2.5.0, update log for Fooocus is [here](https://github.com/lllyasviel/Fooocus/releases/tag/v2.5.0)
+- 合并 Fooocus 2.5.0，Fooocus 的更新日志在[这里](https://github.com/lllyasviel/Fooocus/releases/tag/v2.5.0)
 
-【New feature】
-- New documentation [FooocusAPI-Docs](https://mrhan1993.github.io/FooocusAPI-Docs)
-- Custom upscale multiple
-- Custom outpaint distance
-- Endpoint for generate mask
-- vae support in preset
-- save_name parameter is back, issue #29
+【新特性】
 
-【Fix】
-- fix an error caused by parameter changes
-- fix ge value for sam_max_detections, it should be 0
-- fix describe image, now is working
-- fix an error when inpaint mask is png
-- fix an error for webhook
+- 新文档 [FooocusAPI-Docs](https://mrhan1993.github.io/FooocusAPI-Docs)
+- 自定义放大倍数
+- 自定义扩图距离
+- `generate mask` endpoint
+- 预设中支持 `vae`
+- `save_name` 参数回归，issue #29
+
+【修复】
+
+- 修复由参数更改引起的错误
+- 修复 `sam_max_detections` 的最小值，应为0
+- 修复描述图像，现在可以工作了
+- 修复当 inpaint mask 格式为 png 时可能会遇到的问题
+- 修复 webhook 的错误

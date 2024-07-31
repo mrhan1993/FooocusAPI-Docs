@@ -1,6 +1,6 @@
 # DescribeImage
 
-You can get prompt from an image by using DescribeImage.
+通过图像反推提示词
 
 ```python
 import requests
@@ -17,7 +17,7 @@ response = requests.post(url, json=params)
 print(response.text)
 ```
 
-you can get the following response, the result may be different when you request multiple times:
+下面是一个示例结果，同一张图片多次执行会得到不同的结果:
 
 ```json
 {

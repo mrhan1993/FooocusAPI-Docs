@@ -1,4 +1,4 @@
-# Overview
+# 概述
 
 FooocusAPI 是对 [Fooocus-API](https://github.com/mrhan1993/Fooocus-API) 项目的重构，它们都是对 [Fooocus](https://github.com/lllyasviel/Fooocus) 项目的二次开发，
 旨在解决原项目中 Gradio 的 API 调用难以理解，且难以满足将 Fooocus 作为服务部署时的使用问题。
