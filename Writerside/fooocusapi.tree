@@ -15,7 +15,11 @@
         <toc-element topic="ServerLess.md"/>
     </toc-element>
     <toc-element topic="Tutorial.md">
+        <toc-element topic="TaskObject.md"/>
         <toc-element topic="Startup-and-configuration.md"/>
+        <toc-element topic="GenerateEndpoint.md"/>
+        <toc-element topic="GetTasks.md"/>
+        <toc-element topic="InputOutput.md"/>
         <toc-element topic="AdvancedParams.md"/>
     </toc-element>
     <toc-element topic="How-to.md">
@@ -34,18 +38,6 @@
         <toc-element topic="AsyncTask.md"/>
     </toc-element>
     <toc-element topic="troubleshoot.md"/>
-    <toc-element topic="API_Reference.md">
-        <toc-element topic="Root.md"/>
-        <toc-element topic="Get_Input.md"/>
-        <toc-element topic="Get_Output.md"/>
-        <toc-element topic="Stop_Engine.md"/>
-        <toc-element topic="Describe_Image.md"/>
-        <toc-element topic="Generate_endpoint_all_in_one.md"/>
-        <toc-element topic="All_Styles.md"/>
-        <toc-element topic="All_Models.md"/>
-        <toc-element topic="Get_Task.md"/>
-        <toc-element topic="Get_Tasks.md"/>
-    </toc-element>
     <toc-element topic="Whats_new.md">
     </toc-element>
 </instance-profile>

@@ -18,4 +18,52 @@
         <description>Created after removal of "DescribeImagePrompt" from FooocusAPI</description>
         <accepts>DescribeImagePrompt.html</accepts>
     </rule>
+    <rule id="7665dedd">
+        <description>Created after removal of "Root" from FooocusAPI</description>
+        <accepts>Root.html</accepts>
+    </rule>
+    <rule id="96641a">
+        <description>Created after removal of "Get Input" from FooocusAPI</description>
+        <accepts>Get_Input.html</accepts>
+    </rule>
+    <rule id="5cdc9c45">
+        <description>Created after removal of "Get Output" from FooocusAPI</description>
+        <accepts>Get_Output.html</accepts>
+    </rule>
+    <rule id="60ad39fb">
+        <description>Created after removal of "Stop Engine" from FooocusAPI</description>
+        <accepts>Stop_Engine.html</accepts>
+    </rule>
+    <rule id="25a89">
+        <description>Created after removal of "Describe Image" from FooocusAPI</description>
+        <accepts>Describe_Image.html</accepts>
+    </rule>
+    <rule id="5cabfc98">
+        <description>Created after removal of "Generate endpoint all in one" from FooocusAPI</description>
+        <accepts>Generate_endpoint_all_in_one.html</accepts>
+    </rule>
+    <rule id="21766158">
+        <description>Created after removal of "All Styles" from FooocusAPI</description>
+        <accepts>All_Styles.html</accepts>
+    </rule>
+    <rule id="763aaae6">
+        <description>Created after removal of "All Models" from FooocusAPI</description>
+        <accepts>All_Models.html</accepts>
+    </rule>
+    <rule id="b30120f">
+        <description>Created after removal of "Get Task" from FooocusAPI</description>
+        <accepts>Get_Task.html</accepts>
+    </rule>
+    <rule id="51080c7f">
+        <description>Created after removal of "Get Tasks" from FooocusAPI</description>
+        <accepts>Get_Tasks.html</accepts>
+    </rule>
+    <rule id="2d5e5c8e">
+        <description>Created after removal of "API Reference" from FooocusAPI</description>
+        <accepts>API_Reference.html</accepts>
+    </rule>
+    <rule id="6939cec9">
+        <description>Created after removal of "ConvertImage" from FooocusAPI</description>
+        <accepts>ConvertImage.html</accepts>
+    </rule>
 </rules>
