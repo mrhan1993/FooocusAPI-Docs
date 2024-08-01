@@ -1,5 +1,16 @@
 # What's new
 
+## 2024-08-01 -- v2.5.2
+
+- Merge Fooocus 2.5.2, update log for Fooocus is [here](https://github.com/lllyasviel/Fooocus/releases/tag/v2.5.2)
+
+【New feature】
+- Use `save_final_enhanced_image_only` to get the final result when using multiple `enhance`
+
+【Fix】
+- fix a doc error for enhance
+- When the requested image does not exist, a 404 is returned instead of an Internal error
+
 ## 2024-07-31 -- v2.5.0
 
 - Merge Fooocus 2.5.0, update log for Fooocus is [here](https://github.com/lllyasviel/Fooocus/releases/tag/v2.5.0)

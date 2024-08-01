@@ -8,8 +8,8 @@ By checking Enhance and switching to the Enhance tab, there are four additional 
 `#1, #2, #3` indicate multiple treatments. Logically, it first generates a `mask` and then redoes the drawing based on the description words. You can consider
 this as a combination of `Upscale or Variation`, `Inpaint`, and `Generate Mask`.
 
-It is important to note that these three are not pipeline tasks. For example, if you want to process an image as
-follows: Vary (Strong) -> Enhance face -> Enhance mouse -> Enhance eye, you will get three result images.
+By default, the program returns images for each stage, For example, if you want to process an image as
+follows: Vary (Strong) -> Enhance face -> Enhance mouse -> Enhance eye, you will get three result images. Use `save_final_enhanced_image_only` to get the final result.
 
 > `enhance_checkbox` must set to True
 
