@@ -19,7 +19,6 @@
   - [高级功能(mix_ip and vary,inpaint)](MixImagePrompt.md)
 - 第二部分：API 提供的独有功能、特性
   - [历史记录/任务管理](ManageTasks.md)
-  - [图像格式转换](ConvertImage.md)
   - [hook](WebHook.md)
   - [自定义放大倍数/扩图距离](CustomUpscaleOutpaint.md)
   - [异步/同步](AsyncTask.md)
