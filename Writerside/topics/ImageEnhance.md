@@ -8,8 +8,8 @@
 `#1, #2, #3` 表示多次处理，从逻辑上看，它就是先生成一个 `mask` 然后根据描述词进行重绘。你可以将这里看做是 `Upscale or Variation`
 ，`Inpaint`，`Generate Mask` 进行了合并。
 
-需要注意的是，这三个不是管道任务，比如我们要对一个图像进行如下处理：Vary (Strong) -> Enhance face -> Enhance mouse -> Enhance eye
-你会得到三张结果图像。
+需要注意的是，传递多个 `enhance` 时，比如我们要对一个图像进行如下处理：Vary (Strong) -> Enhance face -> Enhance mouse -> Enhance eye
+你会得到三张结果图像。使用 `save_final_enhanced_image_only` 参数可以只获取最终图像。
 
 > `enhance_checkbox` must set to True
 

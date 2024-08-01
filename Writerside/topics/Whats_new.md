@@ -1,5 +1,16 @@
 # 更新日志
 
+## 2024-08-01 -- v2.5.2
+
+- 合并 Fooocus 2.5.2, Fooocus 的[升级日志](https://github.com/lllyasviel/Fooocus/releases/tag/v2.5.2)
+
+【新特性】
+- 当使用了多个图像增强时，使用 `save_final_enhanced_image_only` 来只获取最终图像
+
+【修复】
+- 修复一个关于图像增强的文档错误
+- 请求图像不存在时，返回 404 而不再是 Internal error
+
 ## 2024-07-31 -- v2.5.0
 
 - 合并 Fooocus 2.5.0，Fooocus 的更新日志在[这里](https://github.com/lllyasviel/Fooocus/releases/tag/v2.5.0)
