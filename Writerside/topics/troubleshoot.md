@@ -1,6 +1,6 @@
 # Troubleshoot
 
-** groundingdino-py install failed **
+**groundingdino-py install failed**
 
 Error info like this:
 
