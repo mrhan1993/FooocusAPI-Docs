@@ -4,7 +4,7 @@
 
 错误信息如下：
 
-```Plain Text
+```text
 Defaulting to user installation because normal site-packages is not writeable
 Looking in indexes: https://mirror.nju.edu.cn/pypi/web/simple
 Collecting groundingdino-py==0.4.0
